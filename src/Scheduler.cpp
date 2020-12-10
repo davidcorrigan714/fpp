@@ -681,17 +681,13 @@ void Scheduler::PlayListStopCheck(void)
       
         if (m_nextSchedulePlaylist.ScheduleEntryIndex != SCHEDULE_INDEX_INVALID &&
             m_nextSchedulePlaylist.ScheduleEntryIndex < m_currentSchedulePlaylist.ScheduleEntryIndex)  {
-            //next scheduled is higher priority
-            if (nowWeeklySeconds > m_nextSchedulePlaylist.startWeeklySeconds) {
+            //next scheduled is higher priority and we are within its time slot
+            if ((nowWeeklySeconds > m_nextSchedulePlaylist.startWeeklySeconds) &&
+                (nowWeeklySeconds < m_nextSchedulePlaylist.endWeeklySeconds)) {
                 stopPlaying = 1;
                 diff = 0;
                 m_forcedNextPlaylist = m_nextSchedulePlaylist.ScheduleEntryIndex;
                 // we are going to stop, but we need to make sure the "next" playlist actually will start
-            } else {
-                int diff2 = m_nextSchedulePlaylist.startWeeklySeconds - nowWeeklySeconds;
-                if (diff2 < diff) {
-                    diff = diff2;
-                }
             }
         }
         int displayDiff = 0;
